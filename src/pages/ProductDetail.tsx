@@ -12,10 +12,31 @@ export function ProductDetail() {
 
   useEffect(() => {
     fetch(`/api/products/${id}`)
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('API failed');
+        return res.json();
+      })
       .then(data => {
         setProduct(data);
         setMainImage(data.image);
+      })
+      .catch(() => {
+        // Fallback mock data for GitHub Pages static hosting
+        const mockProduct = { 
+          id: id, 
+          name: "Preview Static Product", 
+          description: "This is a static preview product because the backend API is not running on GitHub Pages. You can see how the design looks here.", 
+          price: 29.99, 
+          animalType: "dog", 
+          image: "https://images.unsplash.com/photo-1576201836106-db1758fd1c97?q=80&w=2070&auto=format&fit=crop", 
+          stock: 10, 
+          images: [
+            "https://images.unsplash.com/photo-1576201836106-db1758fd1c97?q=80&w=2070&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?q=80&w=2000&auto=format&fit=crop"
+          ]
+        };
+        setProduct(mockProduct);
+        setMainImage(mockProduct.image);
       });
   }, [id]);
 

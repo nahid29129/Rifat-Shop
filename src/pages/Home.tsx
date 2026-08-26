@@ -8,8 +8,20 @@ export function Home() {
 
   useEffect(() => {
     fetch('/api/products')
-      .then(res => res.json())
-      .then(data => setFeaturedProducts(data.slice(0, 4)));
+      .then(res => {
+        if (!res.ok) throw new Error('API failed');
+        return res.json();
+      })
+      .then(data => setFeaturedProducts(data.slice(0, 4)))
+      .catch(() => {
+        // Fallback mock data for GitHub Pages static hosting
+        setFeaturedProducts([
+          { id: "1", name: "Interactive Treat Puzzle Toy", price: 24.99, compareAtPrice: 29.99, image: "https://images.unsplash.com/photo-1576201836106-db1758fd1c97?q=80&w=2070&auto=format&fit=crop" },
+          { id: "2", name: "Orthopedic Dog Bed", price: 89.99, compareAtPrice: 109.99, image: "https://images.unsplash.com/photo-1544568100-847a948585b9?q=80&w=1974&auto=format&fit=crop" },
+          { id: "3", name: "Interactive Feather Cat Toy", price: 34.99, image: "https://images.unsplash.com/photo-1511275539165-cc46b1ee89bf?q=80&w=2070&auto=format&fit=crop" },
+          { id: "4", name: "Cozy Cat Bed", price: 45.00, compareAtPrice: 55.00, image: "https://images.unsplash.com/photo-1615266895738-11f1371cd7e5?q=80&w=2069&auto=format&fit=crop" }
+        ]);
+      });
   }, []);
 
   return (
