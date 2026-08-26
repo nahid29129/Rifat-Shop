@@ -7,9 +7,17 @@ export function AdminOrders() {
 
   useEffect(() => {
     fetch('/api/admin/orders')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error("API Failed");
+        return res.json();
+      })
       .then(data => setOrders(data))
-      .catch(console.error);
+      .catch(() => {
+        // Fallback for GitHub Pages where backend is not running
+        setOrders([
+          { id: "ORD-123", createdAt: new Date().toISOString(), guestEmail: "preview@github.com", status: "pending", total: 129.99 }
+        ]);
+      });
   }, []);
 
   return (

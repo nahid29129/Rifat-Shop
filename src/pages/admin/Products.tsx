@@ -22,8 +22,17 @@ export function AdminProducts() {
 
   const fetchProducts = () => {
     fetch('/api/products')
-      .then(res => res.json())
-      .then(data => setProducts(data));
+      .then(res => {
+        if (!res.ok) throw new Error("API failed");
+        return res.json();
+      })
+      .then(data => setProducts(data))
+      .catch(() => {
+        // Fallback for GitHub Pages where backend is not running
+        setProducts([
+          { id: "1", name: "Preview Product", animalType: "dog", stock: 10, price: 29.99, image: "https://images.unsplash.com/photo-1576201836106-db1758fd1c97?q=80&w=2070&auto=format&fit=crop" }
+        ]);
+      });
   };
 
   useEffect(() => {
