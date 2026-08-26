@@ -31,30 +31,11 @@ export function Checkout() {
     e.preventDefault();
     setIsProcessing(true);
 
-    try {
-      const res = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: user?.id,
-          guestEmail: !user ? formData.email : null,
-          items,
-          subtotal,
-          shippingCost,
-          total,
-          shippingAddress: `${formData.address}, ${formData.city}, ${formData.country}, ${formData.postalCode}`
-        })
-      });
-
-      if (!res.ok) throw new Error('Order failed');
-
+    setTimeout(() => {
       clearCart();
       setSuccess(true);
-    } catch (err) {
-      alert("Failed to process order.");
-    } finally {
       setIsProcessing(false);
-    }
+    }, 1500);
   };
 
   if (success) {

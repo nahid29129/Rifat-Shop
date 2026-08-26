@@ -1,12 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
-import { ShoppingCart, Search, Menu, User } from "lucide-react";
+import { ShoppingCart, Search, Menu } from "lucide-react";
 import { useCartStore } from "../store/cart";
-import { useAuthStore } from "../store/auth";
 
 export function Header() {
   const { getTotals } = useCartStore();
   const { count } = getTotals();
-  const { user, logout } = useAuthStore();
   const navigate = useNavigate();
 
   return (
@@ -30,23 +28,6 @@ export function Header() {
           <button className="text-muted-foreground hover:text-foreground">
             <Search className="h-5 w-5" />
           </button>
-          
-          <div className="group relative">
-            <button className="text-muted-foreground hover:text-foreground flex items-center gap-1" onClick={() => !user && navigate('/login')}>
-              <User className="h-5 w-5" />
-            </button>
-            {user && (
-              <div className="absolute right-0 top-full mt-2 w-48 rounded-md border bg-popover p-2 shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                <div className="px-2 py-1.5 text-sm font-medium truncate">{user.name}</div>
-                <hr className="my-1 border-muted" />
-                {user.role === 'admin' && (
-                  <Link to="/admin" className="block rounded-sm px-2 py-1.5 text-sm hover:bg-muted">Admin Dashboard</Link>
-                )}
-                <Link to="/account" className="block rounded-sm px-2 py-1.5 text-sm hover:bg-muted">My Account</Link>
-                <button onClick={() => { logout(); navigate('/'); }} className="w-full text-left rounded-sm px-2 py-1.5 text-sm hover:bg-muted text-destructive">Logout</button>
-              </div>
-            )}
-          </div>
 
           <Link to="/cart" className="relative text-muted-foreground hover:text-foreground">
             <ShoppingCart className="h-5 w-5" />
